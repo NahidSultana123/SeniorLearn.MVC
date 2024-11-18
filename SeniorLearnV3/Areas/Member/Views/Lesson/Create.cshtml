@@ -1,0 +1,95 @@
+﻿@* @model SeniorLearnV3.Areas.Member.Models.Lesson.CreateLesson
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DurationInMinutes"></label>
+        <input asp-for="DurationInMinutes" class="form-control" />
+        <span asp-validation-for="DurationInMinutes" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LessonStatusId">Lesson Status</label>
+        <select asp-for="LessonStatusId" asp-items="Model.LessonStatuses" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DeliveryModeId">Delivery Mode</label>
+        <select asp-for="DeliveryModeId" asp-items="Model.DeliveryModes" class="form-control" id="deliveryModeSelect"></select>
+    </div>
+
+    <div id="addressField" class="form-group" style="display:none;">
+        <label asp-for="Address">Address</label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div id="urlField" class="form-group" style="display:none;">
+        <label asp-for="URL">Meeting Link</label>
+        <input asp-for="URL" class="form-control" />
+        <span asp-validation-for="URL" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Capacity"></label>
+        <input asp-for="Capacity" class="form-control" />
+        <span asp-validation-for="Capacity" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TopicId">Topic</label>
+        <select asp-for="TopicId" asp-items="Model.Topics" class="form-control"></select>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Create Lesson</button>
+    
+</form>
+
+@section Scripts {
+   
+    <script>
+        // Function to show/hide fields based on delivery mode selection
+        function toggleFields() {
+            var deliveryMode = document.getElementById("deliveryModeSelect").value;
+            var addressField = document.getElementById("addressField");
+            var urlField = document.getElementById("urlField");
+
+            if (deliveryMode == "1") { // OnPremises
+                addressField.style.display = "block";
+                urlField.style.display = "none";
+            } else if (deliveryMode == "2") { // Online
+                addressField.style.display = "none";
+                urlField.style.display = "block";
+            } else {
+                addressField.style.display = "none";
+                urlField.style.display = "none";
+            }
+        }
+
+        // Trigger field toggle on page load and when delivery mode changes
+        document.getElementById("deliveryModeSelect").addEventListener("change", toggleFields);
+        window.onload = toggleFields; // Ensure the correct field is shown on page load
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+ *@

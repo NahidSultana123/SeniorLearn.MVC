@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Enrollment>
+
+@{
+    ViewData["Title"] = "Lesson Enrollments";
+}
+<h2>Lesson Enrolments</h2>
+<br />
+<br />
+<h4>Total enroled members: @Model.Count()</h4>
+
+
+
+@if (ViewData["Message"] != null)
+{
+    <p>@ViewData["Message"]</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Member Name</th>
+                <th>Enrollment Date</th>
+                <th>Lesson Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var enrollment in Model)
+            {
+                <tr>
+                    <td>@enrollment.Member.FirstName @enrollment.Member.LastName</td> <!-- Adjust based on Member class properties -->
+                    <td>@enrollment.EnrollmentDate.ToString("dd MMM yyyy")</td> <!-- Adjust date format if necessary -->
+                    <td>@enrollment.Lesson.Name</td> <!-- Adjust based on Lesson class properties -->
+                    <td>@enrollment.Status.ToString()</td> <!-- Adjust based on Lesson class properties -->
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Action Buttons -->
+<div class="form-group">
+    <a href="javascript:window.history.back();" class="btn btn-primary">Go Back</a>
+
+</div>

@@ -1,0 +1,86 @@
+﻿@model SeniorLearnV3.Data.Member
+@{
+    ViewData["Title"] = "Welcome";
+}
+<h1 class="text-center mb-4"><strong>Welcome, @Model.FirstName @Model.LastName!</strong></h1>
+<div class="container mt=4">
+    
+   @*  <p class="text-center">We're glad to have you as part of our community.</p> *@
+
+    <div class="row mt-6">
+        <!-- Left column for text -->
+        <div class="col-md-8">
+            <p class="mt-4 large-paragraph">
+                <strong> Welcome to <strong>Senior Learn</strong>, your gateway to lifelong learning and community engagement! Here, seniors can explore a wide range of enriching lessons designed to keep minds active and curious. Whether you're looking to develop new skills or share your expertise, SeniorLearn offers a platform for growth and connection. Together, let's embrace the joy of learning at every stage of life!</strong>
+            </p>
+            <p class="mt-4 obj-heading"><strong>What You Can Do as a Member</strong></p>
+            <ul class="list-unstyled">
+                <li class="mb-2 large-obj"><i class="bi bi-bookmark-fill me-2"></i>
+                    <span class="bold-text">Enroll in Lessons:</span> Discover and enroll in a variety of lessons designed to keep you engaged and learning.
+                </li>
+                <li class="mb-2 large-obj"><i class="bi bi-eye me-2"></i>
+                    <span class="bold-text">View Your Lessons:</span> Track the progress of the lessons you’re enrolled in and stay up-to-date.</li>
+                <li class="mb-2 large-obj"><i class="bi bi-person-fill me-2"></i>
+                    <span class="bold-text">Update Your Profile:</span> Manage your personal information for a customized experience.
+                </li>
+                <li class="mb-2 large-obj"><i class="bi bi-card-list me-2"></i>
+                    <span class="bold-text">View Payment History:</span> Access your payment records for transparency and tracking.
+                </li>
+                @if (Model.IsActiveProfessionalMember)
+                {
+                    <li class="large-obj"><i class="bi bi-laptop me-2"></i>
+                        <span class="bold-text">Professional Members:</span>Create and deliver lessons to the community, sharing your expertise and knowledge.
+                        </li >
+                }
+            </ul>
+        </div>
+
+        <!-- Right column for image -->
+        <div class="col-md-4 mt-6">
+            <img src="~/images/member-home-pic.png" alt="Welcome to SeniorLearn" class="img-fluid rounded shadow" style="margin-left: auto;" />
+        </div>
+       
+    </div>
+
+
+    <!-- Quick Links section below the row -->
+    <div class="mt-4 mb-8">
+        <h3 class="mb=6">Quick Links</h3>
+        @* <ul class="list-unstyled"> *@
+        <ul class="list-inline">
+            <li class="list-inline-item mt-2 me-5 quick-links">
+                <a asp-area="Member" asp-controller="Home" asp-action="ViewProfile">View Profile</a></li>
+            <li class="list-inline-item me-5 quick-links">
+                <a asp-area="Member" asp-controller="Home" asp-action="EditProfile">Update Profile</a></li>
+            <li class="list-inline-item me-5 quick-links">
+                <a asp-area="Member" asp-controller="Home" asp-action="PaymentHistory">View Payment History</a></li>
+            @* <li class="list-inline-item me-5"><a href="/Lessons/Enroll">Enroll in New Lessons</a></li>  *@
+        </ul>
+    </div>
+</div>
+
+<style>
+    .large-paragraph {
+        font-size: 1.2rem;
+    }
+
+    .obj-heading{
+        font-size: 1.1rem;
+        font-weight:bold;
+    }
+
+    .large-obj{
+        font-size: 1.1rem;
+    }
+
+    .bold-text {
+        font-weight: bold;
+    }
+
+    .quick-links {
+        font-weight: bold;
+        font-size: 1.2rem; /* Adjust as needed */
+    }
+</style>
+
+

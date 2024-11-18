@@ -1,0 +1,81 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;   
+}
+ 
+
+/*TODO
+added*/
+.nav-link i {
+    font-size: x-large;
+    color: midnightblue;
+}
+
+.enroled-event {
+    background-color: #eaf2e1;
+    color: forestgreen;
+    border: 1px solid forestgreen;
+}
+
+/* TODO: ...........................Work on Style later - fix footer to go further down.............................................*/
+/*html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html, body {
+    height: 100%;*/ /* Ensure the page takes the full height of the viewport */
+    /*margin: 0;*/ /* Remove margin */
+/*}
+
+body {
+    display: flex;
+    flex-direction: column;*/ /* Stack items vertically */
+/*}
+
+main {
+    flex-grow: 1;*/ /* Make the main content fill available space */
+/*}
+
+footer {
+    margin-top: auto;*/ /* Push footer to the bottom */
+/*}*/
+
+/* Optional Custom Styles */
+/*.nav-link i {
+    font-size: x-large;
+    color: midnightblue;
+}
+
+.enroled-event {
+    background-color: #eaf2e1;
+    color: forestgreen;
+    border: 1px solid forestgreen;
+}*/

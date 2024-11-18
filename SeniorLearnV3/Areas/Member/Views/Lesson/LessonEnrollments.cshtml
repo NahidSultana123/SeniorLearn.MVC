@@ -1,0 +1,52 @@
+﻿@* 
+@model List<SeniorLearnV3.Areas.Member.Models.Enrollment.EnrollmentDetails>
+
+@{
+    ViewData["Title"] = "Enrollments for Lesson";
+}
+
+<h2>Enrollments for: @Model.FirstOrDefault()?.LessonName</h2>
+<h3>Total Enrolled: @Model.FirstOrDefault()?.EnrolledCount</h3>
+<h3>Available Space: @Model.FirstOrDefault()?.AvailableSpace</h3>
+
+@if (Model.Count == 0)
+{
+    <p>No enrollments found for this lesson.</p>
+}
+else
+{
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Enrollment ID</th>
+                <th>Member Name</th>
+                <th>Enrollment Date</th>
+                <th>Status</th>
+                <th>Actions</th> <!-- New column for actions -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var enrollment in Model)
+            {
+                <tr>
+                    <td>@enrollment.EnrollmentId</td>
+                    <td>@enrollment.MemberName</td>
+                    <td>@enrollment.LessonStartDate.ToString("yyyy-MM-dd")</td>
+                    <td>@enrollment.Status</td>
+                    <td>
+                        @if (enrollment.Status == SeniorLearnV3.Data.Enrollment.Statuses.Withdrawn.ToString())
+                        {
+                            <form asp-action="ActivateEnrollment" method="post" onsubmit="return confirm('Do you really want to Activate the Member Enrollment?');">
+                                <input type="hidden" name="enrollmentId" value="@enrollment.EnrollmentId" />
+                                <button type="submit" class="btn btn-success">Activate</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+          
+            }
+        </tbody>
+    </table>
+} *@

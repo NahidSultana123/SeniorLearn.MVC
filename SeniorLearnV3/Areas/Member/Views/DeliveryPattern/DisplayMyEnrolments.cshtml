@@ -1,0 +1,94 @@
+﻿@model Member
+@{
+    ViewData["Title"] = "My Enrolments";
+}
+
+<!-- Display Success Message -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<!-- Display Error Message -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+<!-- Display Lesson Withdraw message -->
+@if (TempData["LessonWithdraw"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["LessonWithdraw"]
+    </div>
+}
+<!-- Display Course Withdraw Message -->
+@if (TempData["CourseWithdraw"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["CourseWithdraw"]
+    </div>
+}
+
+<div>
+    <div class="alert alert-primary" role="alert">Enrolments: @Model.Enrollments.Count</div>
+    @if (Model.Enrollments.Any())
+    {
+
+        <table class="table">
+            <thead>
+                <tr><th>Lesson</th><th>Start</th><th>Finish</th><th>Status</th><th>Mode</th><th>Course</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var enrolment in Model.Enrollments)
+                {
+                    <tr>
+                        <td>@enrolment.Lesson.Name</td>
+                        <td>@enrolment.Lesson.Start</td>
+                        <td>@enrolment.Lesson.Finish</td>
+                        <td>@enrolment.Lesson.Status</td>
+                        <td>@enrolment.Lesson.DeliveryMode</td>
+                        <td>@(enrolment.Lesson.DeliveryPattern.IsCourse ? "Yes" : "No")</td>
+                        <td>
+                        @if (enrolment.Status == SeniorLearnV3.Data.Enrollment.Statuses.Active)
+                        {@* 
+                                <a asp-area="Member" asp-controller="DeliveryPattern" asp-action="WithdrawFromLesson"
+                                   asp-route-id="@enrolment.Lesson.Id"
+                                   onclick="return confirm('Do you really want to withdraw from this lesson?');">
+                                    Withdraw</a> *@
+                              @*   <form method="post" asp-area="Member" asp-controller="DeliveryPattern" asp-action="WithdrawFromLesson" style="display:inline;">
+                                    <input type="hidden" name="lessonId" value="@enrolment.LessonId" />
+                                    <button type="submit" class="btn btn-link"
+                                        onclick="withdrawConfirmation('@enrolment.LessonId', '@(enrolment.Lesson.DeliveryPattern.IsCourse ? "This is a course. Withdrawing from this lesson will automatically withdraw you from the entire course. Proceed?" : "Do you confirm to withdraw from this lesson?")');">
+                                        Withdraw
+                                    </button>
+                                </form> *@
+                                <form method="post" asp-area="Member" asp-controller="DeliveryPattern" asp-action="WithdrawFromLesson" style="display:inline;">
+                                    <input type="hidden" name="lessonId" value="@enrolment.LessonId" />
+                                    <button type="submit" class="btn btn-link"
+                                            onclick="return withdrawConfirmation('@enrolment.LessonId', '@(enrolment.Lesson.DeliveryPattern.IsCourse ? "This is a course. Withdrawing from this lesson will automatically withdraw you from the entire course. Proceed?" : "Do you confirm to withdraw from this lesson?")');">
+                                        Withdraw
+                                    </button>
+                                </form>
+                        }
+                        </td>
+
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function withdrawConfirmation(lessonId, message) {
+            // Show confirmation dialog with the message
+            return confirm(message);
+        }
+    </script>
+}

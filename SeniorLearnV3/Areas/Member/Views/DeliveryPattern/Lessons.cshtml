@@ -1,0 +1,93 @@
+﻿@model SeniorLearnV3.Data.DeliveryPattern
+
+
+@{
+    ViewData["Title"] = "Lessons";
+}
+
+@if (TempData["ChangeCourseStatus"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["ChangeCourseStatus"]
+    </div>
+}
+@if (TempData["ChangeLessonStatus"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["ChangeLessonStatus"]
+    </div>
+}
+
+<h2>Lessons: @Model.Name</h2>
+<table class="table">
+    <thead><tr><th>Lesson Id</th><th>Name</th><th>Start</th><th>End</th><th>Duration (minutes)</th><th>Mode</th><th>Topic</th><th>Status</th><th>Action</th><th>Change Status To</th></tr></thead>
+    <tbody>
+        @foreach (var l in Model.Lessons)
+        {
+            <tr>
+                <td>@l.Id</td>
+                <td>@l.Name</td>
+                <td>@l.Start.ToLongDateString() @l.Start.ToShortTimeString()</td>
+                <td>@l.Finish</td>
+                <td>@l.DurationInMinutes</td>
+                <td>@l.DeliveryMode</td>
+                <td>@l.Topic.Name</td>
+                <td>@l.Status</td>
+                 <td>
+                    <a asp-area="Member" asp-action="DisplayLessonEnrolments" asp-route-id="@l.Id">View Lesson Enrolments</a> |
+                    <a asp-area="Member" asp-action="UpdateLesson" asp-route-id="@l.Id">Edit</a> |
+                    <a asp-area="Member" asp-controller="DeliveryPattern" asp-action="LessonDetails" asp-route-id="@l.Id">Details</a>
+                </td>
+                <td>
+                    @if (l.Status == SeniorLearnV3.Data.Lesson.LessonStatuses.Draft)
+                    {
+                       // Draft = 1, Scheduled = 2, Closed = 3, Complete = 4, Cancelled = 5
+                        <form asp-action="ChangeStatus" method="post">
+                            <input type="hidden" name="lessonId" value="@l.Id" />
+                            <input type="hidden" name="newStatus" value="Scheduled" />
+                            <button type="submit" class="btn btn-primary">Scheduled</button>
+                        </form>
+                    }
+                    @if (l.Status == SeniorLearnV3.Data.Lesson.LessonStatuses.Scheduled)
+                    {
+                        <form asp-action="ChangeStatus" method="post">
+                            <input type="hidden" name="lessonId" value="@l.Id" />
+                            <input type="hidden" name="newStatus" value="Closed" />
+                            <button type="submit" class="btn btn-warning">Closed</button>
+                        </form>
+                    }
+                    @if (l.Status == SeniorLearnV3.Data.Lesson.LessonStatuses.Closed)
+                    {
+                        <form asp-action="ChangeStatus" method="post">
+                            <input type="hidden" name="lessonId" value="@l.Id" />
+                            <input type="hidden" name="newStatus" value="Complete" />
+                            <button type="submit" class="btn btn-success">Complete</button>
+                        </form>
+                    }
+                </td>
+               @*  <td>
+                    @foreach (var s in l.ValidTransitions)
+                    {
+                        switch (s)
+                        {
+
+                            case Lesson.Statuses.Scheduled:
+                                <form asp-action="OpenLesson">
+                                    <input type="hidden" name="Id" id="Id" value="@l.Id" />
+                                    <input type="submit" value="Open" />
+                                </form>
+
+                                break;
+                            case Lesson.Statuses.Closed:
+                                <form asp-action="CloseLesson">
+                                    <input type="hidden" name="Id" id="Id" value="@l.Id" />
+                                    <input type="submit" value="Close" />
+                                </form>
+                                break;
+                        }
+                    }
+                </td> *@
+            </tr>
+        }
+    </tbody>
+</table>

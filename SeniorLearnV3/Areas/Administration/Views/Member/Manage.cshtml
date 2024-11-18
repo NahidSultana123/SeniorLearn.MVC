@@ -1,0 +1,124 @@
+﻿@model SeniorLearnV3.Areas.Administration.Models.Member.Manage
+
+@{
+    ViewData["Title"] = "Manage Member";
+} 
+
+<div class="container">
+    <h1 class="mb-4">Manage Member: @Model.FirstName @Model.LastName</h1>
+    <h2>(@Model.Email)</h2>
+
+    <!-- Personal Information Section -->
+    <div class="card mb-4 shadow-sm p-3">
+        <h3 class="card-title text-primary">Personal Information</h3>
+        <form asp-action="Manage">
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label asp-for="FirstName">First Name</label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="LastName">Last Name</label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="DateOfBirth">Date of Birth</label>
+                    <input asp-for="DateOfBirth" class="form-control" type="date" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="RenewalDate">Renewal Date</label>
+                    <input asp-for="RenewalDate" class="form-control" type="date" />
+                    <span asp-validation-for="RenewalDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="OutstandingFees">Outstanding Fees</label>
+                    <input asp-for="OutstandingFees" class="form-control" />
+                    <span asp-validation-for="OutstandingFees" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Save Changes" class="btn btn-success w-100" />
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Email" />
+        </form>
+    </div>
+
+    <!-- Membership Roles Section -->
+    <div class="card shadow-sm p-3 mb-4">
+        <h3 class="card-title text-primary">Membership Roles</h3>
+        <div class="d-flex flex-wrap">
+            @foreach (var r in Model.Roles.OrderBy(r => r.Order))
+            {
+                <div class="card m-2 p-2" style="width: 180px;">
+                    <div class="d-flex flex-column align-items-center">
+                        <h5 class="card-title mb-2">
+                            <span class="badge @(r.Active ? "badge-success" : "badge-secondary")">@r.RoleType</span>
+                        </h5>
+                        <user-role-icon role-active="@r.Active" role-type="@r.RoleType" style="cursor: pointer"></user-role-icon>
+                    </div>
+                    <div class="role-history p-2 mt-2 border rounded" style="display: none;">
+                        <strong>History:</strong>
+                        @foreach (var u in r.Updates)
+                        {
+                            <div class="mt-1">
+                                <small>@u.Timestamp.ToShortDateString(): @u.Notes</small>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Manage Membership Status Section -->
+    <div class="card shadow-sm p-3 mb-4">
+        <h3 class="card-title text-primary">Manage Membership Status</h3>
+        <div class="d-flex flex-column gap-3">
+            <form asp-action="UpdateStandardRole" asp-controller="Member" class="w-100">
+                <button type="submit" class="btn btn-primary w-100">
+                    @((Model.IsActiveStandardMember ? "Deactivate" : "Activate") + " Standard Membership")
+                </button>
+                <input type="hidden" name="active" id="active" value="@(Model.IsActiveStandardMember ? 0 : 1)" />
+                <input type="hidden" asp-for="Id" />
+            </form>
+
+            <form asp-action="UpdateProfessionalRole" asp-controller="Member" class="w-100">
+                <button type="submit" class="btn btn-primary w-100">
+                    @((Model.IsActiveProfessionalMember ? "Deactivate" : "Activate") + " Professional Role")
+                </button>
+                @if (!Model.IsActiveProfessionalMember)
+                {
+                    <div class="form-group mt-2">
+                        <label class="font-weight-bold">Choose Renewal Duration:</label>
+                        <div class="d-flex justify-content-around">
+                            <label>
+                                <input name="Renewal" type="radio" value="3" /> 3 Months
+                            </label>
+                            <label>
+                                <input name="Renewal" type="radio" value="12" /> 12 Months
+                            </label>
+                        </div>
+                    </div>
+                }
+                <input type="hidden" name="active" id="active" value="@(Model.IsActiveProfessionalMember ? 0 : 1)" />
+                <input type="hidden" asp-for="Id" />
+            </form>
+
+            @if (!Model.IsActiveHonoraryMember)
+            {
+                <form asp-action="GrantHonoraryRole" asp-controller="Member" class="w-100">
+                    <button type="submit" class="btn btn-primary w-100">Grant Honorary Role</button>
+                    <input type="hidden" asp-for="Id" />
+                </form>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/administration.member.manage.js"></script>
+}

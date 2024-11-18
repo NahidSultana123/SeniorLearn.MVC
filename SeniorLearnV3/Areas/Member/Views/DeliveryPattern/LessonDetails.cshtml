@@ -1,0 +1,239 @@
+﻿@model SeniorLearnV3.Areas.Member.Models.DeliveryPattern.LessonDetails
+
+<h2>Lesson: @Model.Name, ID: @Model.Id</h2>
+
+<div class="lesson-details">
+    <form>
+        <!-- Start: Grouping Delivery Pattern, Lesson Name, and Description -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>Lesson Information</strong>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Delivery Pattern:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.DeliveryPatternName</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Lesson Name:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.Name</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Description:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.Description</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Topic:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.TopicName</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Status:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.Status</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End: Grouping Delivery Pattern, Lesson Name, and Description -->
+ 
+        <!-- Start: Grouping Date and Time -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>Date & Time Information</strong>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Start Date:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.Start.ToShortDateString()</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Start Time:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.StartTime</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Finish Time:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.FinishTime</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Duration (Minutes):</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.DurationInMinutes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End: Grouping Date and Time -->
+
+
+
+        <!-- Start: Grouping Delivery Mode, Address, and Meeting Link -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>Delivery Mode Information</strong>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Delivery Mode:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.DeliveryMode</p>
+                    </div>
+                </div>
+
+                <!-- Show address if delivery mode is OnPremises -->
+                @if (Model.DeliveryMode.ToString() == "OnPremises")
+                {
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Address:</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.Address</p>
+                        </div>
+                    </div>
+                }
+
+                <!-- Show URL if delivery mode is Online -->
+                @if (Model.DeliveryMode.ToString() == "Online")
+                {
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Meeting Link:</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.URL</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <!-- End: Grouping Delivery Mode, Address, and Meeting Link -->
+
+        <!-- Start: Grouping Capacity, Enrolled Count, Professional, and End Date in a Card -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>Other Details</strong>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Maximum Capacity:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.Capacity</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Number of Enrolled Members:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.EnrolledCount</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Course:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.IsCourse</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Delivery Pattern Type:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.DeliveryPatternType</p>
+                    </div>
+                </div>
+                     
+
+                @* Display the days if it is a weekly repeating lesson *@
+                @if (Model.WeeklyDays != null && Model.WeeklyDays.Any())
+                {
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Held on:</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">
+                                @string.Join(", ", Model.WeeklyDays)
+                            </p>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.DeliveryPatternType.ToString()=="Daily" || Model.DeliveryPatternType.ToString()=="Weekly")
+           
+                {
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">End Date:</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.EndOn?.ToShortDateString()</p>
+                        </div>
+                    </div>
+                }
+
+
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Professional:</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-plaintext">@Model.ProfessionalName</p>
+                    </div>
+                </div>
+
+             
+            </div>
+        </div>
+        <!-- End: Grouping Capacity, Enrolled Count, Professional, and End Date in a Card -->
+
+    </form>
+</div>
+
+
+<!-- Action Buttons -->
+<div class="form-group">
+    <a id="enrol-btn" href="#" class="btn btn-success mr-2">Enrol</a>
+   @*  <a asp-action="Index" class="btn btn-primary">Go Back</a> *@
+    <a href="javascript:window.history.back();" class="btn btn-primary">Go Back</a>
+
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        document.getElementById('enrol-btn').addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent the default behavior
+
+            // Check if the lesson belongs to a course
+            var isCourse = "@Model.IsCourse".toLowerCase();; // Pass the Model.IsCourse value to JavaScript
+           
+            // console.log("IsCourse value:", isCourse); // Debugging output
+
+            if (isCourse === "true") {
+                // Alert for lessons that belong to a course
+                if (confirm("Enrol in Lesson\n\nNote: This lesson is part of a course. By enrolling, you will automatically be enrolled in all lessons within the course. Please note that you are expected to attend all lessons for the entire course.")) {
+                    window.location.href = '@Url.Action("Enrol", "DeliveryPattern", new { area = "Member", id = Model.Id })';
+                }
+            } else {
+                // Simple alert for standalone lessons
+                if (confirm("Do you confirm to enrol in this lesson?")) {
+                    window.location.href = '@Url.Action("Enrol", "DeliveryPattern", new { area = "Member", id = Model.Id })';
+                }
+            }
+        });
+    </script>
+}
+
+
+

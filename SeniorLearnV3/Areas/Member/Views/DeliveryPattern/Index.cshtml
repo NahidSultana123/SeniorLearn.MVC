@@ -1,0 +1,39 @@
+﻿@model IEnumerable<SeniorLearnV3.Data.DeliveryPattern>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="d-flex justify-content-end">
+    <a asp-action="Create" class="btn btn-primary">+ Register Delivery Plan </a>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr><th>Type</th><th>Name</th><th>Start</th><th>Course</th><th>Mode</th><th>Lessons Include</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.PatternType</td>
+                <td>@item.Name </td>
+                <td>@item.StartOn</td>
+                <td>@(item.IsCourse ? "YES" : "NO")</td>
+                <td>@item.DeliveryMode</td>
+                <td>
+                    <a asp-action="Lessons" asp-route-id="@item.Id">Lessons (@item.Lessons.Count)</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

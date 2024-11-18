@@ -1,0 +1,18 @@
+﻿@model IEnumerable<SeniorLearnV3.Data.Payment>
+@{
+    ViewData["Title"] = "Payments";
+}
+<p><a asp-action="Create" asp-route-id="@ViewBag.MemberId" class="btn btn-primary">Record Payment</a></p>
+<table class="table">
+    <thead><tr><th>Media</th><th>Amount</th><th>Date</th><th>Approved</th></tr></thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>           
+            <td>@item.PaymentMethod</td>
+            <td>@item.Amount.ToString("c")</td>
+             <td>@item.PaymentDate.ToString("d")</td>
+            <td>@item.Approved</td>
+        </tr>
+}
+    </tbody>
+</table>

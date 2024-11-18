@@ -1,0 +1,39 @@
+﻿@model List<SeniorLearnV3.Data.Notification>
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<h2>Notifications</h2>
+
+<div class="container mt-4">
+    <div class="list-group">
+        @if (Model.Any())
+        {
+            @foreach (var notification in Model)
+            {
+                <div class="list-group-item @(notification.IsRead ? "list-group-item-light" : "list-group-item-primary")">
+                    <h5 class="mb-1">
+                        <strong>@notification.Title</strong>
+                    </h5>
+                    <p class="mb-1">@notification.Message</p>
+                    <small class="text-muted">Received on: @notification.CreatedDate.ToString("MMMM dd, yyyy - HH:mm")</small>
+
+                    <form asp-action="MarkAsRead" method="post" class="mt-2">
+                        <input type="hidden" name="notificationId" value="@notification.Id" />
+                        <button type="submit" class="btn btn-sm @(notification.IsRead ? "btn-secondary" : "btn-success")">
+                            @(notification.IsRead ? "Mark as Unread" : "Mark as Read")
+                        </button>
+                    </form>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info text-center" role="alert">
+                You have no notifications.
+            </div>
+        }
+    </div>
+</div>
+

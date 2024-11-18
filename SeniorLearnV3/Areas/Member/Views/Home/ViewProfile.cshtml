@@ -1,0 +1,54 @@
+﻿@model SeniorLearnV3.Data.Member
+<div class="container">
+    <h1>Profile of @Model.FirstName @Model.LastName</h1>
+   
+     <p>Here is your profile information:</p> 
+
+        <div class="card mt-4">
+            <div class="card-body">
+               @*  <h5 class="card-title">Member Details</h5> *@
+                <!-- Hidden field to pass the Id -->
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <p><strong>Name:</strong> @Model.FirstName @Model.LastName</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+                <p><strong>Date of Birth:</strong> @Model.DateOfBirth</p>
+                <p><strong>User Id:</strong> @Model.UserId</p>
+                <p><strong>Renewal Date:</strong> @Model.RenewalDate</p>
+                <p><strong>Outstanding Fees:</strong> $@Model.OutstandingFees</p>
+
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Membership Status</h5>
+
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <strong>Standard Membership:</strong>
+                                @(Model.IsActiveStandardMember ? "Active" : "Inactive")
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Professional Membership:</strong>
+                                @(Model.IsActiveProfessionalMember ? "Active" : "Inactive")
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Honorary Membership:</strong>
+                                @(Model.IsActiveHonoraryMember ? "Active" : "Inactive")
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+         </div>
+    </div>
+
+</div>
+
+<div class="form-group mt-4">
+    <a asp-area="Member"
+       asp-controller="Home"
+       asp-action="EditProfile"
+       asp-route-id="@Model.Id"
+       class="btn btn-success mr-2">Update Profile</a>
+    @*  <a asp-action="Index" class="btn btn-primary">Go Back</a> *@
+    <a href="javascript:window.history.back();" class="btn btn-primary">Go Back</a>
+
+</div>
+

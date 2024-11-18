@@ -1,0 +1,99 @@
+﻿@* @model IEnumerable<SeniorLearnV3.Areas.Member.Models.Lesson.LessonDetails>
+
+@{
+    ViewData["Title"] = "Index";
+} *@
+
+@* @if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+} *@
+
+@* @if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+ *@
+@* <h1>Lessons Offered By: @Model.FirstOrDefault()?.ProfessionalName</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+         
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DurationInMinutes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryMode)
+            </th>
+      
+            <th>
+                @Html.DisplayNameFor(model => model.Capacity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EnrolledCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TopicName)
+            </th>
+      
+            <th>Action</th>
+        </tr>
+    </thead>
+<tbody> *@
+@* @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+      
+            <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DurationInMinutes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryMode)
+            </td>
+        
+            <td>
+                @Html.DisplayFor(modelItem => item.Capacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EnrolledCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TopicName)
+            </td>
+       
+            <td>
+                <a asp-area="Member" asp-action="Update" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="LessonEnrollments" asp-route-id="@item.Id">View All Enrollments</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table> *@

@@ -1,0 +1,97 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SeniorLearn</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="~/SeniorLearnV3.styles.css" asp-append-version="true" />
+    @* <!-- Full Calendar Scripts --> *@
+    <link rel="stylesheet" href="~/css/main.css" />
+    <script src="~/js/main.js"></script>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/senior-learn-logo1.png" width="60" height="60"/>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Member" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+
+@* 
+                        <!-- For notification -->
+                        <li class="nav-item">
+                            <a class="nav-link position-relative" href="@Url.Action("NotificationsCount", "Home")">
+                                <i class="bi bi-bell"></i> <!-- Bootstrap bell icon -->
+                                <!-- Display notification count badge if there are unread notifications -->
+                                @if (ViewData["NotificationCount"] != null && (int)ViewData["NotificationCount"] > 0)
+                                {
+                                    <span class="badge badge-danger position-absolute top-0 start-100 translate-middle">
+                                        @(ViewData["NotificationCount"])
+                                    </span>
+                                }
+                            </a>
+                        </li> *@
+
+                     
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Member" asp-controller="Home" asp-action="Notifications"><i class="bi bi-bell-fill"></i> @(ViewData["NotificationCount"])</a>
+                        </li>
+
+
+                        @if (await UserManager.UserHasActiveRoleAsync<Professional>(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Member" asp-controller="DeliveryPattern" asp-action="Index">My Delivery Plans</a>
+                            </li>
+                        }
+                     
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Member" asp-controller="Calendar" asp-action="Index">Calendar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Member" asp-controller="DeliveryPattern" asp-action="DisplayMyEnrolments">My Enrolments</a>
+                        </li>
+
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted text-center">
+        <div class="container">
+            SeniorLearn Project made with <i class="bi bi-book"></i> by ASP.Net MVC    - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a><br>
+            &copy; 2024 SeniorLearn. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

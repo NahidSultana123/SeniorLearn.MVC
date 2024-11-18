@@ -1,0 +1,56 @@
+﻿@model IEnumerable<SeniorLearnV3.Data.Enrollment>
+
+<h2>My Enrollments</h2>
+
+@if (!Model.Any())
+{
+    <p>You are not enrolled in any lessons at the moment.</p>
+}
+else
+{
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Lesson Name</th>
+                <th>Start Date</th>
+                <th>Duration (Minutes)</th>
+                <th>Lesson Status</th>
+                <th>Enrollment Status</th>
+                <th>Enrollment Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var enrollment in Model)
+            {
+                <tr>
+                    <td>@enrollment.Lesson.Name</td>
+                    <td>@enrollment.Lesson.Start.ToString("g")</td>
+                    <td>@enrollment.Lesson.DurationInMinutes</td>
+                    <td>@enrollment.Lesson.Status</td>
+                    <td>@enrollment.Status</td>
+                    <td>@enrollment.EnrollmentDate.ToString("g")</td>
+                    <td>
+                        @if (enrollment.Status == SeniorLearnV3.Data.Enrollment.Statuses.Active)
+                        {
+                            <form asp-action="WithdrawFromLesson" asp-controller="Enroll" method="post" onsubmit="return confirm('Do you really want to withdraw from this lesson?');">
+                                <input type="hidden" name="lessonId" value="@enrollment.LessonId" />
+                                <button type="submit" class="btn btn-danger">Withdraw</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Member>
+@{
+    ViewData["Title"] = "Members";
+}
+<div class="d-flex justify-content-between">
+    <a asp-action="Register">Register</a>
+    <span>
+        <a class="mr-2 btn btn-primary" asp-action="" asp-route-active="@(null)">All</a>
+        <a class="mr-2 btn btn-primary" asp-action="" asp-route-active="@(true)">Active</a>
+        <a class="mr-2 btn btn-primary" asp-action="" asp-route-active="@(false)">Inactive</a>
+    </span>
+    <span>COUNT: @Model.Count()</span>
+
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Member ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Date Of Birth</th>
+            <th>Renewal Date</th>
+            <th>Outstanding Fees</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model)
+        {
+            <tr>
+                <td>@m.Id</td>
+                <td>@m.FirstName</td>
+                <td>@m.LastName</td>
+                <td>@m.Email</td>
+                <td>@m.DateOfBirth.ToShortDateString()</td>
+                <td>@m.RenewalDate.ToShortDateString()</td>
+                <td>@m.OutstandingFees.ToString("C")</td>
+                <td>
+                    <a asp-action="Manage" asp-route-id="@m.Id">Manage</a> |
+                    <a asp-action="Index" asp-controller="Payment" asp-route-id="@m.Id">Payments</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

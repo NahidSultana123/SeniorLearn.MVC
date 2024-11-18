@@ -1,0 +1,129 @@
+﻿@model SeniorLearnV3.Areas.Member.Models.DeliveryPattern.UpdateLesson
+
+
+
+<form asp-action="UpdateLesson" method="post" id="updateLessonForm">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Start"></label>
+        <input asp-for="Start" class="form-control" />
+        <span asp-validation-for="Start" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DurationInMinutes"></label>
+        <input asp-for="DurationInMinutes" class="form-control" />
+        <span asp-validation-for="DurationInMinutes" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LessonStatusId">Lesson Status</label>
+        <select asp-for="LessonStatusId" asp-items="Model.LessonStatuses" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DeliveryModeId">Delivery Mode</label>
+        <select asp-for="DeliveryModeId" asp-items="Model.DeliveryModes" class="form-control" id="deliveryModeSelect"></select>
+    </div>
+
+    <!-- Address field for OnPremises -->
+    <div id="addressField" class="form-group" style="display:none;">
+        <label asp-for="Address">Address</label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <!-- URL field for Online -->
+    <div id="urlField" class="form-group" style="display:none;">
+        <label asp-for="URL">Meeting Link</label>
+        <input asp-for="URL" class="form-control" />
+        <span asp-validation-for="URL" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Capacity"></label>
+        <input asp-for="Capacity" class="form-control" />
+        <span asp-validation-for="Capacity" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TopicId">Topic</label>
+        <select asp-for="TopicId" asp-items="Model.Topics" class="form-control"></select>
+    </div>
+
+   @*  <button type="submit" class="btn btn-primary mt-3">Update Lesson</button> *@
+
+    <div class="form-group d-flex gap-2">
+        <button type="submit" class="btn btn-primary mt-3">Update Lesson</button>
+       
+        <a href="javascript:window.history.back();" class="btn btn-secondary mt-3 border">Go Back</a>
+    </div>
+    
+
+</form>
+
+<!-- Form for cancelling the lesson -->
+<form asp-action="CancelLesson" method="post" id="cancelLessonForm" class="mt-3">
+    <input type="hidden" asp-for="Id" />
+
+    <h5>Cancel Lesson</h5>
+    <div class="form-group">
+        <label for="title">Notification Title</label>
+        <input type="text" id="title" name="title" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="message">Notification Message</label>
+        <textarea id="message" name="message" class="form-control" rows="3" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this lesson?');">Cancel Lesson</button>
+</form>
+
+@section Scripts {
+    <script>
+
+        // Function to show/hide fields based on delivery mode selection
+        function toggleFields() {
+            var deliveryMode = document.getElementById("deliveryModeSelect").value;
+            var addressField = document.getElementById("addressField");
+            var urlField = document.getElementById("urlField");
+
+            if (deliveryMode == "1") { // OnPremises
+                addressField.style.display = "block";
+                urlField.style.display = "none";
+            } else if (deliveryMode == "2") { // Online
+                addressField.style.display = "none";
+                urlField.style.display = "block";
+            } else {
+                addressField.style.display = "none";
+                urlField.style.display = "none";
+            }
+        }
+
+        // Trigger field toggle on page load and when delivery mode changes
+        document.getElementById("deliveryModeSelect").addEventListener("change", toggleFields);
+        window.onload = toggleFields; // Ensure the correct field is shown on page load
+
+
+
+    </script>
+
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

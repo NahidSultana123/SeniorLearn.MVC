@@ -1,0 +1,243 @@
+// ------------------------------------------------------Web API (Nic)-------------------------------------------------------------------------------
+18/11/2024
+Add MongoDB connection settings - done
+initialize Bulletin collection in BulletinController -done
+Add SeedBulletins endpoint to seed initial bulletin data with comments - done
+
+11 November
+
+Add Bulletin class- done
+Modify Bulletin Controller to replace repository - done
+
+7/11/2024 - 8/11/2024 - Work on View of Managing or editing member info
+- Add each badges in card - done
+- Use card to separate each section - done
+
+- Change UI in Admin area (Apply bootstrap for Admin area)- working (Working on updating UI until 4/11/2024)
+
+4/11/2024
+[] Display a chart (call to web API and ) -done
+bar chart x axis standard and professional 
+and y axis is the metric
+
+- Create an Api controller (done)
+- Add Api endpoint to fetch required data (done)
+- return data in Json format (done)
+
+
+29/10/2024 (For Nic) - Web API
+(Following Nic's recording Week9 and doing it at the same time)
+- Check all the packages are installed correctly - done
+- Check ApplicationDbContext and Program.cs (setup middleware) - done(some questions with policy - just leave as it is for this time)
+- Rewrite code for token controller [Login model and method to check user credentials]  - done 
+- Removed signIn manager - done
+- Generate a new key (using HMACSHA256 algorithm and then convert to Base64 string- did that in console app) - done
+- Add JWT configuration to validate JSON Web Tokens (with Key, Issuer, Audience and Subject) - done in (done in appsettings.Json file instead of appsettings.Development.json)
+- Update Login method in token controller (to generate token and write it in response)- done
+- Test using Postman if the token is generated ok - done
+- Verify the token in Jwt.io web site - done
+
+30/10/2024
+(Following Nic's MovieRating WebApi)
+- Add Bulletin Class - done
+- Add BulletinRepository with some data for Bulletin object// (Temporary hard code data to test)
+- Add method to get all bulletin
+- Add method to get bulletin by id
+- Secure one/ two end points in BulletinController (fetch all bulletin from the repo/ search with an id) with authorization required- done
+- Test on Postman the endpoints with authorization token and proper Api route- done (both end points are working properly)
+
+
+//-----------------------------------------------------------------------MVC (Peter)-------------------------------------------------------------------------
+# Sprint 1: 26-08-2024 to 22-09-2024 (4 Weeks) [Completed]
+
+## High-Level Tasks
+1. Manage Member Roles (username, password)   
+2. Assign and manage system roles for members (Standard, Professional, Honorary, Administrator)
+3. Create new members / Edit member details
+4. Record member payments (support various payment methods)
+5. Activate new membership
+
+## Detailed Tasks
+
+- [ ] Configure appsettings.json
+
+### Identity and Role Management
+
+- [ ] Create identity-related classes (User, Role, UserRole, etc.)
+- [ ] Extend classes from ASP.NET Identity as required
+- [ ] Create base classes: Member, Organisation, Payment, Topic (under Data folder)
+- [ ] Add classes to the DbContext as DbSet
+- [ ] Update Program.cs
+- [ ] Setup EntityMapper for entity configurations
+- [ ] Seed initial data (roles, members, etc.)
+
+### Structure and Layout
+- [ ] Create Areas: Administration, Member
+- [ ] Set up Razor Layout
+- [ ] Set up middleware
+- [ ] Import pages into both areas
+
+### Administration Area
+- [ ] Create Member Controller:
+- [ ] Register new members
+- [ ] Update member details
+- [ ] Display all member information
+- [ ] Update member roles (Standard, Professional, Honorary)
+- [ ] Create Topic Controller:
+- [ ] Display all topic information
+- [ ] Add new topics
+- [ ] Edit existing topics
+- [ ] Create Payment Controller:
+- [ ] Retrieve and display member payments
+- [ ] Record new payments
+- [ ] Calculate outstanding fees
+
+### Testing and Validation (Testing done side by side)
+- [ ] Test all new features and controllers
+- [ ] Ensure data seeding works as expected
+- [ ] Validate payment calculations and membership activations
+
+# Sprint 2: 23-09-2024 to 06-10-2024 (2 Weeks) [started...]
+
+## High-Level Tasks
+1. Schedule Lesson: Enable scheduling of new lessons.
+2. Enroll in Lesson: Facilitate member enrollment in lessons.
+3. Withdraw Enrollment: Allow members to withdraw from lessons.
+4. Update Lesson Status: Manage updates to lesson statuses.
+5. Cancel Lesson: Provide the ability to cancel scheduled lessons.
+
+Detailed Task 26/09/2024 - 27/09/2024- 
+- [. ] Design and Create Lesson class
+
+- [ ] Create Enrollment class
+
+- [ ] Update Entity Mapper, establish relationship
+- [ ] Add class to the DbContext as DbSet
+- [ ] Create Professional Area and code for Razor layout
+- [ ] Update Controller to Create new lesson
+
+28/09/2024
+- Remove Professional area. -done
+- Handle both enrolment and lesson in Member area -done
+- Show list of courses -done
+29/09/2024
+- Create lesson -done
+- Update Lesson -done
+
+-Write code to enrol member in a lesson -done
+
+30/09/2024
+Withdraw from a lesson. -done
+Professional member can Reactivate a  student enrolment. -done
+(If withdrawn done by mistake/ on request by the student)
+
+9/10/2024
+Fix Lesson class- done
+Working on Delivery Pattern class - done
+
+10/10/2024 - done
+Added DeliveryPattern, updated Lesson class
+Updated Entity mapper to establish relationship between delivery pattern and lesson and other classes.
+
+11/10/2024
+Work on Delivery Controller to-
+- Display all Delivery Plans for the professional member -done
+- Work on methods to create new Delivery Pattern (HttpGet and HtttPost)- done
+- Show all lessons under a DeliveryPattern -working
+
+16/10/2024
+Check and Fix code for outstanding Fees(From Sprint1) - done
+
+18/10/2024
+Add Calendar- done
+- Download Calendar Bundle and add required js and css files     -done
+- Add Empty calendar (In Member Home area for now to test if it is displaying correctly- test successful)     -done
+
+Move the empty calendar display from Member Area Home page to Calendar navigation menu -done
+-add navigation code for calendar in _Layout page -done
+-create a new controller Calendar -done
+-create/Confirm action method Index -done
+-create a view Calendar->Index.cshtm  -done
+- Move code from Member Area home page to Calendar->Index.cshtm  -done
+- Test for the empty calendar displaying properly while clicking on Calendar navigation menu item  -done
+
+Display Scheduled Lessons in Calendar -done
+-Test using lesson class, if data is fetching from lesson class - done
+
+- Customize footer to go to bottom of the page -done
+
+Need to Display data in Calendar in Organised way - done
+- Display only topic name in calendar  -done
+- While mouse hove over display additional info from     
+       lesson, delivery pattern and others as needed. -done
+- while clicking on the event decide which way to go- done 
+       enrol or showing lesson details (probably enrol)
+
+19/10/2024
+- Enrolment Process (Working)
+- Click calendar event to enrol user in a lesson/ course 
+	- Set up FullCalendar  to handle event clicks  - done (* Improve coding later *) 
+	- Create API end point - working - done (* Improve coding later *) 
+	- Create Enrolment function - working (done for standalone or repeating lessons not course)
+
+For 20/10/2024  -----done
+
+[(Change of Plan- Add LessonDetails Razor View, Calendar event click will redirect to LessonDetails page, from there enrol member) --- working   -done
+	- Update Enrolment function to enrol member in a course (enrol in all lessons belongs to the course) - *** for 20 oct morning - first thing to do  ]
+
+	- Enrol Unsuccessful message - not displaying exact information in error message - *** for 20 oct   -priority	- done
+- Member Area Home Page add Navigation My Enrolments - done
+- Show Details of My Enrolments - for 20 oct  -priority	 - done
+
+- 1. Added LessonDetails model class in DeliveryPattern -done
+- 2. Updated DeliveryController with LessonDetails action method to show Lesson Details -done
+- 3. Added Razor View LessonDetails.cshtml file under View->DeliveryPattern -done
+- 4. While event click on Calendar redirect to Lesson details page instead of enrolling member directly into the lesson - done
+- 5. Add Enrol method to enrol member in lesson/ course - done
+- 6. Test- can Enrol member into a single lesson while IsCourse-false/ lessons while IsCourse - true - done
+- 7. Add My Enrolments navigation menu item, create route for that -done
+- 8. Add Razor Page to display All enrolments for the user - done
+
+Work to-do for 21/10/2024 -done
+Check when one lesson status under a course is changed from draft to scheduled, all lesson status should be changed under that course  -done
+
+Things to do- 22/10/2024 to 29/10/2024
+
+- Display alert message before enrolling a student/ member - done
+- check enrolment for multiple lessons as a course - working - done
+- Withdraw from enrolled lesson/ course - done
+- Create constructor in LessonDetails class and move initialization code from DeliveryPattern controller - done
+- Display alert message before withdraw from course - done
+- check (go back button) for lesson details page navigating to right pages - done
+
+25/10/2024 - check status of enrolment (active, withdrawn..) and lessons (draft, scheduled...)
+
+- When Lesson capacity reach its  max , lesson status changes from Scheduled to closed   - done
+(- * Confirm with peter-  the lesson status change from scheduled to closed while capacity reach max or professional member is going to change manually? )
+- Ammend Participant capacity and make Closed lesson to scheduled again - done in updatelsson method 
+- Check Back button working in Lesson Details properly - done
+
+- Display more info in Lesson Details page- delivery pattern type daily/ weekly, what days of the week - done
+
+- Work on Cancel status of Lesson (* Cancel of lesson needs to notify all enrolled members in that class)
+	- Create notification table, update member table, entity mapper - done
+	- Added method to cancel lesson -done
+	- Created notifications for members enrolled in the lessons that has been cancelled. - done
+
+- 26to 27th October worked on User notifications on cancelled classes- done
+-27 October - display all enrolments for a single lesson - done
+
+- Change UI in Admin area (Apply bootstrap for Admin area)- working (Working on updating UI until 4/11/2024)
+
+- Fix Admin area Topic Edit function- done
+ (HttpGet - done, HttpPost -done)
+
+12/11 to 14/11
+
+- Seed some dummy data for Delivery Pattern, Lessons and Enrollments table - done
+- Undo Pagination for now (as the packages used for Pagination X.PagedList.EntityFramework conflicting with EntityFrameworkCore found at the time of adding migration to seed recent data) -done
+
+15/11/24
+- Modify Member Home page -done
+	- Add a quick link that will navigate to- 
+		Display Member Profile, Update Profile and Display Payment History - done

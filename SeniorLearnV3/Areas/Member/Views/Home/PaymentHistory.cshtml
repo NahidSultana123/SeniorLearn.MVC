@@ -1,0 +1,31 @@
+﻿@model IEnumerable<SeniorLearnV3.Data.Payment>
+
+@{
+    ViewData["Title"] = "Payment History";
+}
+
+<h2 class="mb-4">Payment History</h2>
+
+<table class="table table-striped table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th style="width: 20%">Payment Date</th>
+            <th style="width: 20%">Amount</th>
+            <th style="width: 20%">Payment Method</th>
+            <th style="width: 20%">Approved</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var payment in Model)
+        {
+            <tr>
+                <td>@payment.PaymentDate.ToShortDateString()</td>
+                <td>@payment.Amount.ToString("C")</td>
+                <td>@payment.PaymentMethod</td>
+                <td>@(payment.Approved ? "Yes" : "No")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Back to Home</a>

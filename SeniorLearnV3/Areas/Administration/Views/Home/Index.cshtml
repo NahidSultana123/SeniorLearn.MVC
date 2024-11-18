@@ -1,0 +1,79 @@
+﻿<h1>Active Enrollments by Member Type</h1>
+<canvas id="enrollmentsChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    async function loadEnrollmentData() {
+        try {
+            const response = await fetch('/api/enrollments/active-enrollments');
+            const data = await response.json();
+
+            const standardCount = data.standard || 0; // Use 0 as default if undefined
+            const professionalCount = data.professional || 0;
+
+            // Configure the chart data
+            const enrollmentData = {
+                labels: ['Standard', 'Professional'],
+
+                // datasets: [{
+                //     label: 'Active Enrollments',
+                //     data: [standardCount, professionalCount],
+                //     backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+                //     borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+                //     borderWidth: 1
+                // }]
+
+                datasets: [
+                    {
+                        label: 'Active Enrollments (Standard Members)', // Blue label
+                        data: [standardCount, 0], // Only data for Standard Members
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)', // Blue background
+                        borderColor: 'rgba(75, 192, 192, 1)', // Blue border
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Active Enrollments (Professional Members)', // Pink label
+                        data: [0, professionalCount], // Only data for Professional Members
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)', // Pink background
+                        borderColor: 'rgba(255, 99, 132, 1)', // Pink border
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            // Chart configuration
+            const config = {
+                type: 'bar',
+                data: enrollmentData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Enrollments'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Member Type'
+                            },
+                            stacked: true
+                          
+
+                        }
+                    }
+                }
+            };
+
+            // Render the chart
+            new Chart(document.getElementById('enrollmentsChart'), config);
+        } catch (error) {
+            console.error("Error loading data:", error);
+        }
+    }
+
+    // Load data and create chart on page load
+    document.addEventListener('DOMContentLoaded', loadEnrollmentData);
+</script>

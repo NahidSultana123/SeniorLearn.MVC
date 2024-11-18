@@ -1,0 +1,76 @@
+﻿
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: '/Member/Calendar/GetLessons',  // URL to fetch lessons
+            eventDidMount: function (info) {
+                $(info.el).tooltip({
+                    title: info.event.extendedProps.lessonDetails, // Display other details in the tooltip
+                    placement: 'bottom',
+                    trigger: 'hover',
+                    container: 'body',
+                    html: true
+                });
+            },
+            eventClick: function (info) {
+                // Handle event click
+                // For example, redirect to lesson details page:
+               // TODO: goback window.location.href = info.event.url;
+               info.jsEvent.preventDefault(); // Prevent default browser action
+                // Extract lessonId from the event (assumed to be part of the event's extendedProps)
+                //var lessonId = info.event.extendedProps.lessonId;
+                var lessonId = info.event.extendedProps.lessonId;
+                // Redirect to the LessonDetails action method in the DeliveryPatternController
+                window.location.href = '/DeliveryPattern/LessonDetails/' + lessonId;
+               
+                // TODO: Check with Peter, if it is ok to do enrolment from LessonDetails page instead directly
+                // Use AJAX to call the enrol endpoint
+                // $.ajax({
+                //     url: '/lessons/' + lessonId + '/enrol',  // API endpoint URL
+                //     type: 'POST',
+                //     success: function (result) {
+                //         // Handle the success response (e.g., show a success message or update the UI)
+                //         alert('Enrolled successfully!');
+
+                //         // Optionally, you can refresh the calendar to reflect the change
+                //         calendar.refetchEvents();
+                //     },
+                //     error: function (jqXHR, textStatus, errorThrown) {
+                //         // Handle any errors (e.g., show an error message)
+                //         alert('Failed to enroll in lesson: ' + textStatus);
+                //     }
+                // });
+            },
+   
+            eventRender: function (info) {
+                // Optional: Add custom rendering logic for events
+            }
+
+
+        });
+        calendar.render();
+    });
+
+</script>
+
+<div class="text-center">
+    <h2 class="display-6">Welcome to Senior Learn Calendar</h2>
+    <div id="calendar"></div>
+</div>
+
+@* 
+            //--------------------------------Check Hover working-----------------------------------
+            // eventDidMount: function (info) {
+            //     // Add a tooltip to display lesson details
+            //     var tooltip = new Tooltip(info.el, {
+            //         title: info.event.extendedProps.lessonDetails, // Display lesson details
+            //         placement: 'top',
+            //         trigger: 'hover',
+            //         container: 'body',
+            //         html: true
+            //     });
+            // },
+            //........................................................................ *@
