@@ -66,6 +66,7 @@ namespace SeniorLearnV3.Controllers.Api
             return Ok("Bulletins data seeded successfully!");
         }
 
+
         [HttpGet]
         public IActionResult GetAllBulletins()
         {
@@ -79,6 +80,30 @@ namespace SeniorLearnV3.Controllers.Api
             return Ok(bulletins); // Return the list of bulletins with a 200 status
         }
 
+        [HttpGet("active")]
+        public async Task<IActionResult> GetAllActiveBulletins()
+        {
+            try
+            {
+                // Filter to fetch only active bulletins
+                var filter = Builders<Bulletin>.Filter.Eq(b => b.IsActive, true);
+
+                // Fetch active bulletins
+                var activeBulletins = await _bulletinCollection.Find(filter).ToListAsync();
+
+                if (activeBulletins == null || activeBulletins.Count == 0)
+                {
+                    return NotFound("No active bulletins found."); // Return 404 if no active bulletins
+                }
+
+                return Ok(activeBulletins); // Return active bulletins with 200 status
+            }
+            catch (Exception ex)
+            {
+                // Log the error as needed
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
 
 
@@ -109,7 +134,7 @@ namespace SeniorLearnV3.Controllers.Api
                     // Inserting the bulletin into the database
                     _bulletinCollection.InsertOne(bulletin);
                     return CreatedAtAction(nameof(CreateBulletin), new { id = bulletin.Id }, bulletin);
-                    // return 201 created status code   location header /api/bulletins/1 ret details of bulletin obj
+                    // return 201 created status code   location header /api/bulletins/id ret details of bulletin obj
                 }
                 catch (Exception ex)
                 {

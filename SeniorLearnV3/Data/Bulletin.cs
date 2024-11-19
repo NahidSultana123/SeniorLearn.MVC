@@ -27,13 +27,11 @@ namespace SeniorLearnV3.Data
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         [BsonElement("isActive")]
-        public bool IsActive { get; set; } = true;  // Default to active
+        public bool IsActive { get; set; } = true;  // Default to active 
 
         [BsonElement("recentComments")]
         public List<Comment> RecentComments { get; set; } = new List<Comment>();
 
-        //[BsonElement("recentComments")]
-        //public List<string> RecentComments { get; set; } = new List<string>();  // stores recent comments only
-
+    
     }
 }
