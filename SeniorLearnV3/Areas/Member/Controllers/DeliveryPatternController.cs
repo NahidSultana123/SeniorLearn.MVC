@@ -45,6 +45,10 @@ namespace SeniorLearnV3.Areas.Member.Controllers
             };
             return View(m);
         }
+        // Handles the creation of a new delivery pattern and its associated lessons
+        // Validates the model state and retrieves the current Professional member based on the logged-in user
+        // Saves the changes to the database and redirects to the index page upon successful creation
+        // If the model state is invalid, rebuilds the topic list 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -72,6 +76,7 @@ namespace SeniorLearnV3.Areas.Member.Controllers
             return View(m);
         }
 
+        // Fetches a delivery pattern with its lessons and topics for display in the view
         [HttpGet]
         public async Task<IActionResult> Lessons(int id)
         {
@@ -81,13 +86,12 @@ namespace SeniorLearnV3.Areas.Member.Controllers
             return View(pattern);
         }
 
+        // Retrieves and prepares a lesson for updating, including topics for selection
+        // Populates an UpdateLesson model with lesson details and a list of topics for selection
+        // Passes the model to the view for rendering the update form
         [HttpGet]
         public async Task<IActionResult> UpdateLesson(int id)
         {
-
-
-            // var lesson = await _context.Lessons.Include(l => l.Topic) // Include topic information if needed
-            // .FirstOrDefaultAsync(l => l.Id == id);
 
             var lesson = await _context.Lessons.Include(l => l.Topic).FirstOrDefaultAsync(l => l.Id == id);
             if (lesson == null)
@@ -118,6 +122,9 @@ namespace SeniorLearnV3.Areas.Member.Controllers
         }
 
         // Method to update single lesson if not course,  multiple lessons if course
+        // Handles the update of lesson details, including adjustments for lessons linked to a course.
+        // If the lesson is part of a course, updating delivery mode or capacity affects all lessons in the course.
+
         [HttpPost]
         public async Task<IActionResult> UpdateLesson(UpdateLesson model)
         {
@@ -165,15 +172,9 @@ namespace SeniorLearnV3.Areas.Member.Controllers
                     lesson.Description = model.Description;
                     lesson.Start = model.Start;
 
-                    //lesson.DeliveryMode = (Lesson.DeliveryModes)model.DeliveryModeId; // Map the selected delivery mode
-                    //lesson.Address = model.Address;
-                    //lesson.URL = model.URL;
-                    //lesson.Capacity = model.Capacity;
 
                     var lessonsInCourse = _context.Lessons.Where(l => l.DeliveryPatternId == lesson.DeliveryPatternId).ToList();
 
-
-                    //if (lesson.DeliveryMode == Lesson.DeliveryModes.OnPremises)
                     if ((Lesson.DeliveryModes)model.DeliveryModeId == Lesson.DeliveryModes.OnPremises)
                     {
                         foreach (var l in lessonsInCourse)
@@ -189,7 +190,7 @@ namespace SeniorLearnV3.Areas.Member.Controllers
 
 
                     }
-                    //else if(lesson.DeliveryMode == Lesson.DeliveryModes.Online)
+                  
                     else if ((Lesson.DeliveryModes)model.DeliveryModeId == Lesson.DeliveryModes.Online)
                     {
                         foreach (var l in lessonsInCourse)
@@ -208,7 +209,6 @@ namespace SeniorLearnV3.Areas.Member.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                //return RedirectToAction("Lessons");
                 return RedirectToAction("Index"); // Redirect to the lesson list or details page
             }
 
@@ -218,6 +218,9 @@ namespace SeniorLearnV3.Areas.Member.Controllers
             return View(model);
         }
 
+
+        // Cancels a lesson and its related lessons in the case of a course.
+        // Updates the lesson's status to 'Cancelled' and sends notifications to the enrolled members.
 
         [HttpPost]
         public async Task<IActionResult> CancelLesson(int id, string title, string message)
@@ -263,6 +266,9 @@ namespace SeniorLearnV3.Areas.Member.Controllers
 
 
         // Change lesson status - one or many
+        // Updates the status of a single lesson or all lessons in a course, depending on the lesson's delivery pattern.
+        // If the lesson is part of a course, it updates the status for all lessons in that course.
+
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(int lessonId, LessonStatuses newStatus)
         {
@@ -301,6 +307,10 @@ namespace SeniorLearnV3.Areas.Member.Controllers
 
 
         //................. Code for Lesson Details ..................................
+
+        // Retrieves and displays details of a lesson by ID, including related data.
+        // Returns an error if the lesson is not found.
+
         [HttpGet]
         [Route("DeliveryPattern/LessonDetails/{id}")]
         public async Task<IActionResult> LessonDetails(int id)
@@ -327,7 +337,7 @@ namespace SeniorLearnV3.Areas.Member.Controllers
         }
 
         //-----------------   Code to Enrol member (in single Lesson while course is False or multiple lessons while Course is true) ----------------------------
-
+        // Enrolls a member in a lesson and handles errors or success messages accordingly.
         public async Task<IActionResult> Enrol(int id)
         {
             var member = await _context.FindMemberAsync(User);
@@ -379,6 +389,8 @@ namespace SeniorLearnV3.Areas.Member.Controllers
         }
 
         // Withdraw from Lesson
+        // Allows a member to withdraw from a lesson or entire course, updating enrollment status and enrolled count.
+
         [HttpPost]
         public async Task<IActionResult> WithdrawFromLesson(int lessonId)
         {
@@ -441,11 +453,13 @@ namespace SeniorLearnV3.Areas.Member.Controllers
 
 
         //Display enrolments list for a lesson
+        // Fetches and displays a list of enrollments for a specified lesson.
+        [HttpGet]
         public async Task<IActionResult> DisplayLessonEnrolments(int id)
         {
 
             //            // Fetch enrollments for the specified lessonId
-            var enrollmentsList = await _context.Enrollments
+            var enrollmentsList =  await _context.Enrollments
                 .Include(e => e.Lesson)
                 .Include(e => e.Member)
                 .Where(e => e.LessonId == id).ToListAsync();

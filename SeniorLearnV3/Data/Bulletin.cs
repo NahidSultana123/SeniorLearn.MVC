@@ -7,31 +7,30 @@ namespace SeniorLearnV3.Data
     public class Bulletin
     {
         [BsonId]
-        public ObjectId Id { get; set; }
+        public ObjectId Id { get; set; } //Unique identifier
 
         [BsonElement("title")]
         [Required(ErrorMessage = "Title is required")]
-        public string? Title { get; set; }
-   
+        public string? Title { get; set; } // Summarize the key point of the bulletin message
+
         [BsonElement("content")]
         [Required(ErrorMessage = "Content is required")]
-        public string? Content { get; set; }
+        public string? Content { get; set; } //The body where the full messages is written.
 
         [BsonElement("createdByUserId")]
-        public string? CreatedByUserId { get; set; }
+        public string? CreatedByUserId { get; set; } //The User ID of the creator
 
         [BsonElement("createdBy")]
-        public string? CreatedBy { get; set; }  //User name
+        public string? CreatedBy { get; set; }  //The creator’s name
 
         [BsonElement("createdDate")]
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow; //The date the bulletin was created.
 
         [BsonElement("isActive")]
-        public bool IsActive { get; set; } = true;  // Default to active 
+        public bool IsActive { get; set; } = true;  //A Boolean indicating if the bulletin is active. Default: true
 
         [BsonElement("recentComments")]
-        public List<Comment> RecentComments { get; set; } = new List<Comment>();
+        public List<Comment> RecentComments { get; set; } = new List<Comment>(); //A list of comments associated with the bulletin.
 
-    
     }
 }

@@ -16,14 +16,15 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
         private readonly UserManager _userManager;
         private readonly IMapper _mapper;
 
-
-        public MemberController(ApplicationDbContext context,UserManager userManager,IMapper mapper) 
+        
+        public MemberController(ApplicationDbContext context, UserManager userManager, IMapper mapper) 
             : base(context)
         {
             _userManager = userManager;
             _mapper = mapper;   
         }
 
+        // Displays a list of members,  filtered by active status.
         [HttpGet]
         public async Task<IActionResult> Index(bool? active)
         {
@@ -41,13 +42,16 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
             return View(members);
         }
 
-
+        // Displays the registration view.
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
-         
+
+        // This method handles the registration process for a new user, creating a user account,
+        // assigning it to an organization and saving the details.
+
         [HttpPost] 
         public async Task<IActionResult> Register(Models.Member.Register m)
         {
@@ -74,6 +78,8 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
             return View(m); 
         }
 
+        // This method retrieves a member by their ID, maps the member data to a manage model, and returns the view for managing the member.
+
         [HttpGet]
         public async Task<IActionResult> Manage(int id)
         {
@@ -85,8 +91,14 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
             var model = _mapper.Map<Models.Member.Manage>(member);
             return View(model);      
         }
+        
+        // This method updates the member's information based on the posted data
+        // and saves the changes to the database.
 
         [HttpPost]
+
+
+
         public async Task<IActionResult> Manage(Models.Member.Manage member)
         {
             var original = await _context.FindMemberAsync(member.Id);
@@ -98,7 +110,7 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
             {
                 original.FirstName = member.FirstName;
                 original.LastName = member.LastName;
-                original.DateOfBirth = member.DateOfBirth;
+                original.DateOfBirth = member.DateOfBirth;  
                 original.RenewalDate = member.RenewalDate;
                 original.OutstandingFees = member.OutstandingFees;
                 await _context.SaveChangesAsync();
@@ -107,6 +119,8 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
             return RedirectToAction("Manage", new { Id = member.Id }); 
         }
 
+        // This method updates the standard role status (active or inactive) of a member
+        // and saves the changes to the database.
 
         [HttpPost]
         public async Task<IActionResult> UpdateStandardRole(int id,int active)
@@ -123,7 +137,8 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
        
         }
 
-
+        // This method updates the professional role status (active or inactive) of a member
+        // and calculates the renewal date if the role is activated.
         [HttpPost]
         public async Task<IActionResult> UpdateProfessionalRole(int id, int active, int renewal)
         {
@@ -158,6 +173,7 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
 
         }
 
+        // This method grants the honorary role to a member and updates their status accordingly.
 
         [HttpPost]
         public async Task<IActionResult> GrantHonoraryRole(int id)

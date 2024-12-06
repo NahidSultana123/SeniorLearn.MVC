@@ -15,12 +15,17 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
         }
 
         // GET: Administration/Topics
+        // This method retrieves all topics from the database and returns them to the view for display.
+
         public async Task<IActionResult> Index()
         {
             return View(await _context.Topics.ToListAsync());
         }
 
         // GET: Administration/Topics/Details/5
+        // This method retrieves the details of a specific topic by its ID and returns it to the view.
+        // If the topic is not found, it returns a "Not Found" result.
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,17 +44,18 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
         }
 
         // GET: Administration/Topics/Create
+        // This method returns the view for creating a new topic.
+
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Administration/Topics/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // This method handles the creation of a new topic. It adds the topic to the database if the model is valid.
+ 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,Name,Description")] Topic topic) //Earlier
+        [ValidateAntiForgeryToken]   
         public async Task<IActionResult> Create(Models.Topic.Create model) //Me
         {           
             if (ModelState.IsValid)
@@ -64,6 +70,9 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
         }
 
         // GET: Administration/Topics/Edit/1
+        // This method retrieves the topic details by ID and prepares the data for editing.
+        // If the topic is not found, it returns a "Not Found" result.
+
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -90,8 +99,9 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
 
 
         // POST: Administration/Topics/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // This method updates the topic details in the database, based on the provided model,
+        // and redirects to the topic list if the update is successful.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Models.Topic.Edit m)
@@ -121,6 +131,9 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
 
 
         // GET: Administration/Topics/Delete/1
+        // This method retrieves and displays the topic to be deleted,
+        // based on the provided ID. If the topic is not found, it returns a "Not Found" response.
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -139,6 +152,9 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
         }
 
         // POST: Administration/Topics/Delete/5
+        // This method handles the deletion of a topic.
+        // It removes the topic from the database and saves the changes. Afterward, it redirects to the index page.
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -153,6 +169,7 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // This method checks if a topic exists in the database based on its ID.
         private bool TopicExists(int id)
         {
             return _context.Topics.Any(e => e.Id == id);

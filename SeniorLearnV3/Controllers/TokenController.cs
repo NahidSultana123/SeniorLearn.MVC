@@ -26,6 +26,11 @@ public class TokenController : ControllerBase
         
     }
 
+
+    // Handles user login, validates credentials, generates a JWT token with claims (including user roles)
+    // returns the token as a response if successful.
+    // If the credentials are invalid, it returns a "BadRequest" error.
+
     [HttpPost]
     public async Task<IActionResult> Login(LoginApiModel model)
     {
@@ -58,6 +63,7 @@ public class TokenController : ControllerBase
                 SymmetricSecurityKey Key = new SymmetricSecurityKey(Convert.FromBase64String(_config["Jwt:Key"]));
                  
                 SigningCredentials sign = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
+                
                 JwtSecurityToken token = new JwtSecurityToken(
                     _config["Jwt:Issuer"],
                     _config["Jwt:Audience"],

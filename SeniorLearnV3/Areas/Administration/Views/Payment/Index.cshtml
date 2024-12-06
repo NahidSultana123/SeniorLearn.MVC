@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Payments";
 }
-<p><a asp-action="Create" asp-route-id="@ViewBag.MemberId" class="btn btn-primary">Record Payment</a></p>
+
 <table class="table">
     <thead><tr><th>Media</th><th>Amount</th><th>Date</th><th>Approved</th></tr></thead>
     <tbody>
@@ -16,3 +16,8 @@
 }
     </tbody>
 </table>
+
+<div class="form-group d-flex">
+        <a asp-action="Create" asp-route-id="@ViewBag.MemberId" class="btn btn-primary w-auto mr-2">Record Payment</a>   
+        <a href="javascript:window.history.back();" class="btn btn-secondary w-auto ml-2">Go Back</a>
+</div>

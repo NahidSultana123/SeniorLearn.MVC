@@ -16,6 +16,7 @@ namespace SeniorLearnV3.Areas.Member.Controllers
         }
 
         // GET: HomeController
+        // Retrieves unread notifications for the logged-in member and displays them.
         public async Task<ActionResult> Index()
         {
             var member = await _context.FindMemberAsync(User);
@@ -28,6 +29,7 @@ namespace SeniorLearnV3.Areas.Member.Controllers
             return View(member);
         }
 
+        // Retrieves and displays the profile of the logged-in member.
         [HttpGet]
         public async Task<ActionResult> ViewProfile()
         {
@@ -39,6 +41,7 @@ namespace SeniorLearnV3.Areas.Member.Controllers
             return View(member);
         }
 
+        // Retrieves the member's current profile details and prepares them for editing.
         [HttpGet]
         public async Task<ActionResult> EditProfile()
         {
@@ -59,6 +62,8 @@ namespace SeniorLearnV3.Areas.Member.Controllers
 
         }
 
+
+        // Handles the submission of the profile edit form, updating the member's details in the database if valid.
         [HttpPost]
         public async Task<IActionResult> EditProfile(EditProfileViewModel model)
         {
@@ -88,6 +93,7 @@ namespace SeniorLearnV3.Areas.Member.Controllers
             return View(model);
         }
 
+        // Retrieves and displays the payment history for the currently logged-in member.
         [HttpGet]
         public async Task<ActionResult> PaymentHistory()
         {
@@ -106,6 +112,7 @@ namespace SeniorLearnV3.Areas.Member.Controllers
 
 
 
+        // Fetches and displays a list of notifications for the currently logged-in member.
         public async Task<IActionResult> Notifications()
         {
             var member = await _context.FindMemberAsync(User);
@@ -117,6 +124,8 @@ namespace SeniorLearnV3.Areas.Member.Controllers
             return View(notifications);
         }
 
+
+        // Marks a notification as read or unread and saves the change to the database.
         [HttpPost]
         public async Task<IActionResult> MarkAsRead(int notificationId)
         {
@@ -130,73 +139,6 @@ namespace SeniorLearnV3.Areas.Member.Controllers
             return RedirectToAction("Notifications");
         }
 
-        // GET: HomeController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: HomeController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: HomeController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: HomeController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: HomeController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: HomeController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: HomeController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+ 
     }
 }

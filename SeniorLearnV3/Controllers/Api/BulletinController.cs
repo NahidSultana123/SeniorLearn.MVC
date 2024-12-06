@@ -9,6 +9,7 @@ namespace SeniorLearnV3.Controllers.Api
 {
     [Route("api/bulletins")]
     [ApiController]
+    //[Authorize]
     public class BulletinController : ControllerBase
     {
 
@@ -24,6 +25,7 @@ namespace SeniorLearnV3.Controllers.Api
         }
 
         // create SeedBulletins end point
+        //method to insert the bulletins into the database and returns a success message.
 
         [HttpPost("seed")]
         public IActionResult SeedBulletins()
@@ -66,7 +68,7 @@ namespace SeniorLearnV3.Controllers.Api
             return Ok("Bulletins data seeded successfully!");
         }
 
-
+        // Retrieves and returns all bulletins from the collection.
         [HttpGet]
         public IActionResult GetAllBulletins()
         {
@@ -96,7 +98,23 @@ namespace SeniorLearnV3.Controllers.Api
                     return NotFound("No active bulletins found."); // Return 404 if no active bulletins
                 }
 
-                return Ok(activeBulletins); // Return active bulletins with 200 status
+                // Convert the Id field to string for each bulletin
+                var bulletinsWithStringId = activeBulletins.Select(b => new
+                {
+                    Id = b.Id.ToString(),        // Convert ObjectId to string
+                    Title = b.Title,
+                    Content = b.Content,
+                    CreatedByUserId = b.CreatedByUserId,
+                    CreatedBy = b.CreatedBy,
+                    CreatedDate = b.CreatedDate,
+                    IsActive = b.IsActive,
+                    RecentComments = b.RecentComments
+                });
+
+                return Ok(bulletinsWithStringId); // returning all active bulletins with 200 status
+
+
+                //return Ok(activeBulletins); // Return active bulletins with 200 status
             }
             catch (Exception ex)
             {
@@ -105,13 +123,50 @@ namespace SeniorLearnV3.Controllers.Api
             }
         }
 
-
-
-        // GET /api/bulletins/{id}
-        [HttpGet("{id}")]
-        public IActionResult GetBulletin([FromRoute] string id)
+        //drafts created by a user
+        [HttpGet("drafts/{userId}")]
+        public async Task<IActionResult> GetMyDrafts([FromRoute] string userId)
         {
-            var bulletin = _bulletinCollection.Find(b => b.Id == new ObjectId(id)).FirstOrDefault();
+             try
+             {
+                // Filter to fetch only draft bulletins for a specific user
+                var filter = Builders<Bulletin>.Filter.And(
+                    Builders<Bulletin>.Filter.Eq(b => b.IsActive, false), // Filter by draft status
+                    Builders<Bulletin>.Filter.Eq(b => b.CreatedByUserId, userId) // Filter by user ID
+                );
+
+                var draftBulletins = await _bulletinCollection.Find(filter).ToListAsync();
+
+                if (draftBulletins == null || draftBulletins.Count == 0)
+                {
+                    return NotFound("No draft bulletins found.");
+                }
+
+                return Ok(draftBulletins); // Return the list of draft bulletins
+             }
+
+            catch (Exception ex)
+             {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+             }
+        }
+
+        // Retrieves a specific bulletin by its ID.
+
+        // GET /api/bulletins/{bulletinId}
+
+        //[HttpGet("{bulletinId}")]
+        [HttpGet("bulletin/{bulletinId}")]
+        public async Task<IActionResult> GetBulletinById(string bulletinId)
+        {
+            // Validate and convert the bulletinId
+            if (!ObjectId.TryParse(bulletinId, out ObjectId objectId))
+            {
+                return BadRequest(new { Message = "Invalid Bulletin ID format." });
+            }
+            //var objectId = new ObjectId(bulletinId);
+
+            var bulletin = await _bulletinCollection.Find(b => b.Id == objectId).FirstOrDefaultAsync();
 
             if (bulletin == null)
             {
@@ -122,19 +177,27 @@ namespace SeniorLearnV3.Controllers.Api
         }
 
 
-        //POST api/bulletins/bulletin/create
-        [HttpPost("bulletin/create")]
 
-        public IActionResult CreateBulletin(Bulletin bulletin)
+
+        // To create a new bulletin
+        // Creates a new bulletin and inserts it into the database.
+        // Returns a 201 status code with the created bulletin and its location,
+        // or a 400 status code if the model is invalid, or a 500 status code in case of an error.
+
+        //POST api/bulletins/bulletin/create
+        [HttpPost]
+
+        public IActionResult CreateBulletin([FromBody] Bulletin bulletin) // Ensures the bulletin is bound from the request body
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     // Inserting the bulletin into the database
+                    bulletin.CreatedDate = DateTime.UtcNow;
                     _bulletinCollection.InsertOne(bulletin);
                     return CreatedAtAction(nameof(CreateBulletin), new { id = bulletin.Id }, bulletin);
-                    // return 201 created status code   location header /api/bulletins/id ret details of bulletin obj
+                    // return 201 created status code  and returns details of bulletin object
                 }
                 catch (Exception ex)
                 {
@@ -145,40 +208,6 @@ namespace SeniorLearnV3.Controllers.Api
 
             return BadRequest(ModelState);
         }
-
-        /* private readonly BulletinRepository _repo;
-
-         // Add constructor
-         public BulletinController()
-         {
-                 _repo = new BulletinRepository();
-         }
-
-
-         [HttpGet]
-         [Authorize]
-         public IActionResult Get()
-         {
-             var result = _repo.GetAll();
-             return Ok(result);
-         }
-
-         // GET /api/bulletins/2
-         [HttpGet("{id}")]
-         [Authorize]
-         public IActionResult GetBulletin([FromRoute] int id)
-         {
-             var bulletin = _repo.GetById(id);
-
-             if (bulletin == null)
-             {
-                 return NotFound();
-             }
-             else
-             {
-                 return Ok(bulletin);
-             }
-         }*/
 
 
     }

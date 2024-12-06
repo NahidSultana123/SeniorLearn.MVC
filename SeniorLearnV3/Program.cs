@@ -1,90 +1,4 @@
-////using Microsoft.AspNetCore.Authorization;
-////using Microsoft.AspNetCore.Identity;
-////using Microsoft.EntityFrameworkCore;
-////using SeniorLearnV3.Data;
-////using SeniorLearnV3.Data.Identity;
 
-////namespace SeniorLearnV3
-////{
-////    public class Program
-////    {
-////        public static void Main(string[] args)
-////        {
-////            var builder = WebApplication.CreateBuilder(args);
-
-////            // Add services to the container.
-////            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-////            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-////                options.UseSqlServer(connectionString));
-////            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-////            // Done to simplify
-////            builder.Services.AddDefaultIdentity<User>(options =>
-////            {
-////                options.SignIn.RequireConfirmedAccount = false;
-////                options.Password.RequireDigit = false;
-////                options.Password.RequireNonAlphanumeric = false;
-////                options.Password.RequiredLength = 1;
-////                options.Password.RequireLowercase = false;
-////                options.Password.RequireUppercase = false;
-////            })
-////                .AddUserStore<UserStore>()
-////                .AddUserManager<UserManager>()
-////                .AddRoles<Role>()
-////                .AddRoleStore<RoleStore>()
-////                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-////            builder.Services.AddTransient<IAuthorizationHandler, ActiveRoleHandler>(); //TODO: Research more
-
-////            //TODO: Configure Cookie/JWT Authentication/Authorization Policy
-
-////            builder.Services.AddControllersWithViews();
-
-////            //TODO: builder.Services.AddAutoMapper(typeof(SeniorLearn.Web.Mapper.Profile)); 
-
-////            var app = builder.Build();
-
-////            //TODO: app.UseRequestLocalization();  ??
-
-////            // Configure the HTTP request pipeline.
-////            if (app.Environment.IsDevelopment())
-////            {
-////                app.UseMigrationsEndPoint();
-////            }
-////            else
-////            {
-////                app.UseExceptionHandler("/Home/Error");
-////                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-////                app.UseHsts();
-////            }
-
-////            app.UseHttpsRedirection();
-////            app.UseStaticFiles();
-
-////            app.UseRouting();
-
-////            //TODO: app.UserCors
-
-
-////            // app.UseAuthentication();  // TODO: extend later
-////            app.UseAuthentication();
-////            app.UseAuthorization();
-
-////            app.MapControllerRoute(
-////            name: "areas",
-////            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-////            app.MapControllerRoute(
-////                name: "default",
-////                pattern: "{controller=Home}/{action=Index}/{id?}");
-
-////            app.MapRazorPages();
-
-////            app.Run();
-////        }
-////    }
-////}
-///
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -96,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using SeniorLearnV3.Data;
-//using SeniorLearnV3.Data.Configuration.Migrations;
 using SeniorLearnV3.Data.Identity;
 using System;
 using System.Globalization;
@@ -122,17 +35,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//{
-//    options.UseSqlServer(connectionString, s =>
-//    {
-//        s.UseAzureSqlDefaults(true);
-//        s.EnableRetryOnFailure(5);
-//    })
-//    .ReplaceService<IMigrationsSqlGenerator, MyMigrationsSqlGenerator>();
-//});
-
-//Setup dependency injection for identity
 //TODO: Configure Identity Access Management
 builder
     .Services.AddDefaultIdentity<User>(options => {
@@ -208,11 +110,26 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddAutoMapper(typeof(SeniorLearnV3.Mapper.Profile));
 
+builder.Services.AddSwaggerGen();
+
+// ------------------ Updating way to add cor policy ------------
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin() //Allows requests from any origin
+        .AllowAnyHeader()       //Allows any HTTP headers in the request.
+        .AllowAnyMethod();      //Allows any HTTP methods(e.g. GET, POST, PUT, DELETE).
+    });
+});
+//--------------------------------------------------------------------------------------
+
 var app = builder.Build();
-app.UseRequestLocalization();
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI();
     app.UseMigrationsEndPoint();
 }
 else
@@ -222,20 +139,39 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+app.UseRequestLocalization();
+// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseMigrationsEndPoint();
+//}
+//else
+//{
+//    app.UseExceptionHandler("/Home/Error");
+//    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+//    app.UseHsts();
+//}
+
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
-//TODO: Cors middleware - checked after sending preflight request
-app.UseCors(policy =>
-{
-    policy.AllowAnyOrigin(); //Allows requests from any origin
-    policy.AllowAnyHeader(); //Allows any HTTP headers in the request.
-    policy.AllowAnyMethod(); //Allows any HTTP methods(e.g. GET, POST, PUT, DELETE).
-});
+//TODO: Cors middleware - checked after sending preflight request commented out on 20 nov
 
-app.UseAuthentication(); //n
+//app.UseCors(policy =>
+//{
+//    policy.AllowAnyOrigin(); //Allows requests from any origin
+//    policy.AllowAnyHeader(); //Allows any HTTP headers in the request.
+//    policy.AllowAnyMethod(); //Allows any HTTP methods(e.g. GET, POST, PUT, DELETE).
+//});
+
+
+
+app.UseCors();
+
+
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllerRoute(

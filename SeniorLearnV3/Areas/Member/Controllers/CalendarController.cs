@@ -9,19 +9,28 @@ namespace SeniorLearnV3.Areas.Member.Controllers
     public class CalendarController : MemberAreaController
     {
         public CalendarController(ApplicationDbContext context):base(context) { }
-      
+
+        // Fetches a list of lessons asynchronously from the database
+        // Returns the view, ensuring that the lesson list is checked for null or empty before processing further
+
         public async Task<IActionResult> Index()
         {
             var lessonlist = await _context.Lessons.ToListAsync();
-            // TODO: Think of if-else result
-            if (lessonlist != null && lessonlist.Count > 0)
+         
+            if (lessonlist == null || lessonlist.Count == 0)
             {
-
+                return NotFound("No lessons available to display.");
             }
             return View();
         }
 
-        [HttpGet] //Get All Lessons for Calendar
+
+        // Fetches a list of lessons from the database and formats them for FullCalendar
+        // Includes related data like DeliveryPattern, Professional, and Topic using eager loading
+        // Filters out lessons in Draft status and maps data into a JSON format suitable for FullCalendar
+        // Provides additional details (e.g., lesson details, start time, delivery mode) as extended properties
+        // Returns the JSON result to be used by the FullCalendar instance
+        [HttpGet] 
         public async Task<JsonResult> GetLessons()
         {
             

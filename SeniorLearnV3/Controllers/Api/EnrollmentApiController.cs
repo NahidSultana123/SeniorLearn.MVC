@@ -19,6 +19,11 @@ namespace SeniorLearnV3.Controllers.Api
             _userManager = userManager; 
         }
 
+        // Fetches the count of active enrollments for both Standard and Professional members.
+        // It first filters active members based on their role (Standard/Professional),
+        // then counts the number of active enrollments for each role. The result is returned
+        // as a JSON object with separate counts for Standard and Professional active enrollments.
+
         [HttpGet("active-enrollments")]
         public async Task<IActionResult> GetActiveEnrollments()
         {

@@ -27,6 +27,7 @@ namespace SeniorLearn.Web.Controllers
             return View();
         }
 
+        // Redirects the user to different areas based on their role.
         public async Task<IActionResult> RedirectUser()
         {
 

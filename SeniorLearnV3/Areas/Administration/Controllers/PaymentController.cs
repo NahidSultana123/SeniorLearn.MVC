@@ -17,6 +17,7 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
         public PaymentController(ApplicationDbContext context) : base(context) { }
 
         // GET: Administration/Payment
+        // This method retrieves and displays the payments associated with a specific member, identified by their id.
         public async Task<IActionResult> Index(int id) // TODO: check sync with Payment- done
         {
             ViewBag.MemberId = id;
@@ -25,9 +26,12 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
 
 
         // GET: Administration/Payment/Create
-        public IActionResult Create(int id)  // TODO: check done
+        // This method initializes and returns a view to create a payment for a specific member, identified by their id.
+        public IActionResult Create(int id)  
             => View(new Models.Payment.Create { MemberId = id });
 
+        // This method handles the creation of a payment for a specific member,
+        // updates their outstanding fees based on their role, and saves the changes to the database.
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -82,37 +86,39 @@ namespace SeniorLearnV3.Areas.Administration.Controllers
         }
 
 
+        // This method retrieves a payment by its ID for deletion,
+        // ensuring the payment exists before displaying the delete confirmation view.
 
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        /* public async Task<IActionResult> Delete(int? id)
+         {
+             if (id == null)
+             {
+                 return NotFound();
+             }
 
-            var payment = await _context.Payments
-                .Include(p => p.Member)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (payment == null)
-            {
-                return NotFound();
-            }
+             var payment = await _context.Payments
+                 .Include(p => p.Member)
+                 .FirstOrDefaultAsync(m => m.Id == id);
+             if (payment == null)
+             {
+                 return NotFound();
+             }
 
-            return View(payment);
-        }
+             return View(payment);
+         }*/
 
         // POST: Administration/Payment/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var payment = await _context.Payments.FindAsync(id);
-            if (payment != null)
-            {
-                _context.Payments.Remove(payment);
-            }
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        /* [HttpPost, ActionName("Delete")]
+         [ValidateAntiForgeryToken]
+         public async Task<IActionResult> DeleteConfirmed(int id)
+         {
+             var payment = await _context.Payments.FindAsync(id);
+             if (payment != null)
+             {
+                 _context.Payments.Remove(payment);
+             }
+             await _context.SaveChangesAsync();
+             return RedirectToAction(nameof(Index));
+         }*/
     }
 }
