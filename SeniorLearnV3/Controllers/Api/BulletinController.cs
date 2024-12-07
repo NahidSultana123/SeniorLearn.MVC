@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using SeniorLearnV3.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace SeniorLearnV3.Controllers.Api
 {
@@ -21,7 +22,7 @@ namespace SeniorLearnV3.Controllers.Api
             var client = new MongoClient(configuration.GetConnectionString("BulletinDb"));
             var database = client.GetDatabase("bulletindb");
             _bulletinCollection = database.GetCollection<Bulletin>("bulletins");
-            
+
         }
 
         // create SeedBulletins end point
@@ -31,7 +32,7 @@ namespace SeniorLearnV3.Controllers.Api
         public IActionResult SeedBulletins()
         {
             var bulletins = new List<Bulletin>
-        
+
             {
                 new Bulletin
                 {
@@ -127,8 +128,8 @@ namespace SeniorLearnV3.Controllers.Api
         [HttpGet("drafts/{userId}")]
         public async Task<IActionResult> GetMyDrafts([FromRoute] string userId)
         {
-             try
-             {
+            try
+            {
                 // Filter to fetch only draft bulletins for a specific user
                 var filter = Builders<Bulletin>.Filter.And(
                     Builders<Bulletin>.Filter.Eq(b => b.IsActive, false), // Filter by draft status
@@ -143,12 +144,12 @@ namespace SeniorLearnV3.Controllers.Api
                 }
 
                 return Ok(draftBulletins); // Return the list of draft bulletins
-             }
+            }
 
             catch (Exception ex)
-             {
+            {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
-             }
+            }
         }
 
         // Retrieves a specific bulletin by its ID.
@@ -176,7 +177,34 @@ namespace SeniorLearnV3.Controllers.Api
             return Ok(bulletin); // Return the found bulletin with a 200 status
         }
 
+        //End point to edit a bulletin
+        // PUT /api/bulletins/{bulletinId}
+        [HttpPut("{bulletinId}")]
+        public async Task<IActionResult> EditBulletin(string bulletinId, [FromBody] EditBulletinModel updatedBulletin)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var filter = Builders<Bulletin>.Filter.Eq(b => b.Id, new ObjectId(bulletinId));
+
+            var update = Builders<Bulletin>.Update
+               .Set(b => b.Title, updatedBulletin.Title)
+               .Set(b => b.Content, updatedBulletin.Content)
+               .Set(b => b.CreatedDate, DateTime.UtcNow);
+
+            var result = await _bulletinCollection.UpdateOneAsync(filter, update);
+
+            if (result.MatchedCount == 0)
+            {
+                return NotFound("Bulletin not found");
+            }
+
+            return Ok(new { Message = "Bulletin updated successfully" });
+
+
+        }
 
 
         // To create a new bulletin
@@ -184,7 +212,7 @@ namespace SeniorLearnV3.Controllers.Api
         // Returns a 201 status code with the created bulletin and its location,
         // or a 400 status code if the model is invalid, or a 500 status code in case of an error.
 
-        //POST api/bulletins/bulletin/create
+        //POST api/bulletins
         [HttpPost]
 
         public IActionResult CreateBulletin([FromBody] Bulletin bulletin) // Ensures the bulletin is bound from the request body
@@ -207,6 +235,16 @@ namespace SeniorLearnV3.Controllers.Api
             }
 
             return BadRequest(ModelState);
+        }
+
+        //EditBulletinModel class
+        public class EditBulletinModel
+        {
+            [Required]
+            public string? Title { get; set; }
+
+            [Required]
+            public string? Content { get; set; }
         }
 
 
